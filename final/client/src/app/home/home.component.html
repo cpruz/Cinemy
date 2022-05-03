@@ -1,0 +1,101 @@
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/home">Cinemy</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+            (click)="isCollapsed = !isCollapsed">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngbCollapse]="isCollapsed">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/myposts">My Posts</a>
+                </li>
+                <li *ngIf="user.userType == 'admin'" class="nav-item">
+                    <a class="nav-link" href="/adminops">Administrator Options</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+            </ul>
+            <div ngbDropdown class="nav-item dropdown">
+                <a ngbDropdownToggle class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                        class="bi bi-person" viewBox="0 0 16 16">
+                        <path
+                            d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+                    </svg>
+                    {{user.firstName}} {{user.lastName}}
+                </a>
+                <div ngbDropdownMenu class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
+                    <a ngbDropdownItem class="dropdown-item" href="/profile">My Profile</a>
+                    <div class="dropdown-divider"></div>
+                    <a ngbDropdownItem class="dropdown-item" href="#" (click)="logout()">Log Out</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main role="main">
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">Explore the Cinemy Community</h1>
+            <p class="lead text-muted">Post on your favorite movies now!</p>
+        </div>
+    </section>
+
+    <div class="container" style="text-align: center;">
+        <div class="row">
+            <div class="btn-group-toggle col-auto" data-toggle="buttons" style="width: fit-content; padding-left: 25%;">
+                <label [ngClass]="popButton ? 'btn btn-light active' : 'btn btn-light'" style="margin: 0px 10px 10px 10px;" (click)="getMovies('popular')">
+                    <input type="radio" name="options" id="option1" autocomplete="off"> Popular
+                </label>
+                <label [ngClass]="nowButton ? 'btn btn-light active' : 'btn btn-light'" style="margin: 0px 10px 10px 10px;" (click)="getMovies('now_playing')">
+                    <input type="radio" name="options" id="option2" autocomplete="off" > Now Playing
+                </label>
+                <label [ngClass]="topButton ? 'btn btn-light active' : 'btn btn-light'" style="margin: 0px 10px 10px 10px;" (click)="getMovies('top_rated')">
+                    <input type="radio" name="options" id="option3" autocomplete="off"> Top Rated
+                </label>
+            </div>
+            <div class="input-group col-auto" style="width: 300px;">
+                <input type="text" class="form-control" style="max-width: 200px; height: 40px;" placeholder="Search for a movie!" aria-label="search" aria-describedby="button-addon2" [(ngModel)]="searchText">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon2" style="height: 40px;" (click)="searchMovie()">Search</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4" *ngFor="let movie of movies">
+                    <div class="card mb-4 box-shadow" style="width: 300px;" (click)="openMovie(movie.id)">
+                        <ng-container *ngIf="movie.poster_path?.length > 40; else elseImg">
+                            <img class="card-img-top" src="{{movie.poster_path}}"  alt="Card image cap">
+                        </ng-container>
+                        <ng-template #elseImg>
+                            <img class="card-img-top" src="assets/default.jpg"  alt="Card image cap">
+                        </ng-template>
+                        <div class="card-body">
+                            <h5 class="card-title" style="text-align: center;">{{movie.title}}</h5>
+                            <h6 class="card-subtitle mb-2" style="text-align: center;">Release Date: {{movie.release_date}}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted" style="text-align: center;">Score: {{movie.vote_average}}</h6>
+                            <ng-container *ngIf="movie.overview.length > 30; else elseOvr">
+                                <p class="card-text">{{movie.overview}}</p>
+                            </ng-container>
+                            <ng-template #elseOvr>
+                                <p class="card-text">No description available.</p>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="bg-light">
+    <p class="lead text-muted">Data Provided by: <img src="assets/tmdb.svg" width="90" height="20"></p>
+</footer>

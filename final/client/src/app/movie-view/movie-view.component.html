@@ -1,0 +1,107 @@
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/home">Cinemy</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+            (click)="isCollapsed = !isCollapsed">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngbCollapse]="isCollapsed">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/myposts">My Posts</a>
+                </li>
+                <li *ngIf="user.userType == 'admin'" class="nav-item">
+                    <a class="nav-link" href="/adminops">Administrator Options</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+            </ul>
+            <div ngbDropdown class="nav-item dropdown">
+                <a ngbDropdownToggle class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                        class="bi bi-person" viewBox="0 0 16 16">
+                        <path
+                            d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+                    </svg>
+                    {{user.firstName}} {{user.lastName}}
+                </a>
+                <div ngbDropdownMenu class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
+                    <a ngbDropdownItem class="dropdown-item" href="/profile">My Profile</a>
+                    <div class="dropdown-divider"></div>
+                    <a ngbDropdownItem class="dropdown-item" href="#" (click)="logout()">Log Out</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container" id="movie-container">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="row">
+                <h1 style="padding-left: 50px">{{movie.title}}</h1>
+            </div>
+            <div class="row">
+                <div class="col-auto">
+                    <ng-container *ngIf="movie.poster_path?.length > 40; else elseImg">
+                        <img class="" src="{{movie.poster_path}}"  alt="Card image cap">
+                    </ng-container>
+                    <ng-template #elseImg>
+                        <img class="" src="assets/default.jpg"  alt="Card image cap">
+                    </ng-template>
+                </div>
+                <div class="col">
+                    <h4>Release Date: <span class="text-muted">{{movie.release_date}}</span></h4>
+                    <div class="row">
+                        <h4>Score: <span class="text-muted">{{movie.vote_average}}</span></h4>
+                    </div>
+                    <div class="row">
+                        <h4>Genres: <span *ngFor="let genre of movie.genres; let i = index" class="text-muted">
+                            {{genre}}<span *ngIf="i+1 != movie.genres.length" class="text-muted">, </span></span>
+                        </h4>
+                    </div>
+                    <div class="row">
+                        <h4>Overview: <span class="text-muted">{{movie.overview}}</span></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="vl col-auto"></div>
+        <div class="col-lg">
+            <form class="form-signin">
+                <h1 class="h3 mb-3 font-weight-normal">Make a Post!</h1>
+                <label for="inputTitle" class="sr-only">Title</label>
+                <input type="text" id="inputTitle" class="form-control" placeholder="Title" required autofocus name="title" [(ngModel)]="title">
+                <label for="inputScore" class="sr-only">Score</label>
+                <input type="number" min="0" max="10" id="inputScore" class="form-control" placeholder="Score" required autofocus name="score" [(ngModel)]="score">
+                <label for="inputDescription" class="sr-only">Description</label>
+                <textarea type="text" id="inputDescription" class="form-control" placeholder="Description" required autofocus name="description" [(ngModel)]="description"></textarea>
+                <button class="btn btn-lg btn-primary btn-block" type="submit" (click)="post()">Post</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div style="background-color: #f5f5f5; height: 20px;"></div>
+
+<div class="container" id="posts-container" style="background-color: #f5f5f5;">
+    <h1 id="post-header" style="text-align:center;">Posts: {{movie.num_posts}}</h1>
+    <div class="row">
+        <div class="col-md-4" *ngFor="let post of movie.posts">
+            <div class="card mb-4 box-shadow" style="width: 300px;">
+                <div class="card-body">
+                    <h5 class="card-title" style="text-align: center;">{{post.title}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted" style="text-align: center;">Score: {{post.score}}</h6>
+                    <p class="card-text">{{post.description}}</p>
+                    <div style="text-align: center;">
+                        <small class="text-muted">Posted By: {{post.user.username}}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

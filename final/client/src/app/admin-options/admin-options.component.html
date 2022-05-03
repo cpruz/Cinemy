@@ -1,0 +1,251 @@
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/home">Cinemy</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+            (click)="isCollapsed = !isCollapsed">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngbCollapse]="isCollapsed">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/myposts">My Posts</a>
+                </li>
+                <li *ngIf="user.userType == 'admin'" class="nav-item">
+                    <a class="nav-link" href="/adminops">Administrator Options</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+            </ul>
+            <div ngbDropdown class="nav-item dropdown">
+                <a ngbDropdownToggle class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                        class="bi bi-person" viewBox="0 0 16 16">
+                        <path
+                            d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+                    </svg>
+                    {{user.firstName}} {{user.lastName}}
+                </a>
+                <div ngbDropdownMenu class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
+                    <a ngbDropdownItem class="dropdown-item" href="/profile">My Profile</a>
+                    <div class="dropdown-divider"></div>
+                    <a ngbDropdownItem class="dropdown-item" href="#" (click)="logout()">Log Out</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container options">
+    <div class="row">
+        <div class="col">
+            <form class="form-signin">
+                <h1 class="h3 mb-3 font-weight-normal">Create a new user</h1>
+                <label for="inputFirstname" class="sr-only">First Name</label>
+                <input type="text" id="inputFirstname" class="form-control" placeholder="First Name" required autofocus name="firstname" [(ngModel)]="firstname">
+                <label for="inputLastname" class="sr-only">Last Name</label>
+                <input type="text" id="inputLastname" class="form-control" placeholder="Last Name" required autofocus name="lastname" [(ngModel)]="lastname">
+                <label for="inputUsername" class="sr-only">Username</label>
+                <input type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus name="username" [(ngModel)]="username">
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required name="password" [(ngModel)]="password">
+                <label for="inputConfirmPassword" class="sr-only">Confirm Password</label>
+                <input type="password" id="pswd" class="form-control" placeholder="Confirm Password" required name="confirmpassword" [(ngModel)]="confirmedPassword">
+                <button class="btn btn-lg btn-primary btn-block" type="submit" (click)="register()">Register</button>
+            </form>
+        </div>
+        <div class="col" style="border-left: 2px solid gray;">
+            <div class="row d-flex justify-content-center">
+                <h1 class="h3 mb-3 font-weight-normal" style="text-align: center;">Modify a user</h1>
+                <div class="input-group col-auto" style="width: 300px; margin-bottom:15px;">
+                    <input type="text" class="form-control" style="max-width: 200px; height: 40px;" placeholder="Search for keywords" aria-label="search" aria-describedby="button-addon2" [(ngModel)]="userSearchText">
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" style="height: 40px; margin-top: 5px;" (click)="searchUsers()">Search</button>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" style="height: 40px; margin-top: 5px;" (click)="getUsers()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                            <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                          </svg>
+                    </button>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                      <th scope="col">First Name</th>
+                      <th scope="col">Last Name</th>
+                      <th scope="col">Username</th>
+                      <th scope="col">User Type</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr id="userRow" (click)="makeActive(user)" *ngFor="let user of users| paginate : {
+                        id: 'user_pag',
+                        itemsPerPage: pageSize,
+                        currentPage: page2,
+                        totalItems: collectionSize}; let i = index">
+                      <td>{{ user.firstName }}</td>
+                      <td>{{ user.lastName }}</td>
+                      <td>{{ user.username }}</td>
+                      <td>{{ user.userType }}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                  <div class="d-flex justify-content-between p-2">
+                    <pagination-controls
+                    id="user_pag"
+                    previousLabel="Prev"
+                    nextLabel="Next"
+                    (pageChange)="onTableDataChange2($event)"
+                  >
+                  </pagination-controls>
+                    <select class="form-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshUsers()">
+                      <option [ngValue]="4">4 items per page</option>
+                      <option [ngValue]="6">6 items per page</option>
+                      <option [ngValue]="8">8 items per page</option>
+                    </select>
+                  </div>
+            </div>
+            <h4 class="mb-3 font-weight-normal" style="padding-top: 15px;">Selected User: {{active.firstName}} {{active.lastName}}</h4>
+            <div class="row">
+                <div class="btn-group-toggle" data-toggle="buttons" style="width: fit-content; padding-left: 9%;">
+                    <label class="btn btn-light modify" style="margin: 0px 10px 10px 10px;" (click)="changeRole($event, 'make')">
+                        <input type="radio" name="options" id="option1" autocomplete="off"> Make Admin
+                    </label>
+                    <label class="btn btn-light modify" style="margin: 0px 10px 10px 10px;" (click)="changeRole($event, 'remove')">
+                        <input type="radio" name="options" id="option2" autocomplete="off" > Remove Admin
+                    </label>
+                    <label class="btn btn-light modify" style="margin: 0px 10px 10px 10px;" (click)="openFunc($event, change)">
+                        <input type="radio" name="options" id="option3" autocomplete="off"> Change Password
+                    </label>
+                    <label class="btn btn-light delete" style="margin: 0px 10px 10px 10px;" (click)="openFunc($event, deleteUsr)">
+                        <input type="radio" name="options" id="option3" autocomplete="off"> Delete User
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" id="posts-container" style="background-color: #f5f5f5;">
+    <div class="row">
+        <div class="col" style="width: 500px; margin-left: 30%;">
+            <h1 id="post-header" style="text-align:center;">All Posts:</h1>
+        </div>
+        <div class="input-group col-auto" style="width: 300px;">
+            <input type="text" class="form-control" style="max-width: 200px; height: 40px;" placeholder="Search for keywords" aria-label="search" aria-describedby="button-addon2" [(ngModel)]="searchText">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon2" style="height: 40px; margin-top: 5px;" (click)="searchPosts()">Search</button>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon2" style="height: 40px; margin-top: 5px;" (click)="getAllPosts()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                  </svg>
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4" *ngFor="let post of posts | paginate : {
+            id: 'post_pag',
+            itemsPerPage: tableSize,
+            currentPage: page,
+            totalItems: count}; let i = index">
+            <div class="card mb-4 box-shadow" style="width: 300px;">
+                <div class="card-body">
+                    <h5 class="card-title" style="text-align: center;">{{post.title}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted" style="text-align: center;">Score: {{post.score}}</h6>
+                    <p class="card-text">{{post.description}}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group" style="padding-right: 15px;">
+                          <button type="button" class="btn btn-sm btn-outline-secondary modify" (click)="openEdit(edit, post)">Edit</button>
+                          <button type="button" class="btn btn-sm btn-outline-secondary delete" (click)="openDelete(deletePst, post)">Delete</button>
+                        </div>
+                        <small class="text-muted" style="text-align: center;">Movie: {{post.movieTitle}}</small>
+                      </div>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted" style="text-align: center;">User: {{post.user.username}}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        <pagination-controls
+          id="post_pag"
+          previousLabel="Prev"
+          nextLabel="Next"
+          (pageChange)="onTableDataChange($event)"
+        >
+        </pagination-controls>
+      </div>
+</div>
+
+<ng-template #change>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Change Password</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="dismiss()"></button>
+    </div>
+    <div class="modal-body">
+        <form class="form-signin">
+            <label for="inputNewPassword" class="sr-only">New Password</label>
+            <input type="password" id="inputNewPassword" class="form-control" placeholder="New Password" required name="newPassword" [(ngModel)]="newPassword">
+            <label for="inputConfNewPassword" class="sr-only">Confirm New Password</label>
+            <input type="password" id="inputConfNewPassword" class="form-control" placeholder="Confirm New Password" required name="confNewPassword" [(ngModel)]="confNewPassword">
+            <button class="btn btn-lg btn-primary btn-block" type="submit" (click)="changePassword()">Change Password</button>
+        </form>
+    </div>
+    <div *ngIf="result != null" class="modal-footer">
+        <h5 style="text-align: center; width: 100%;">{{result}}</h5>
+    </div>
+</ng-template>
+
+<ng-template #deleteUsr>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Delete User?</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="dismiss()"></button>
+    </div>
+    <div class="modal-body">
+        <button class="btn btn-lg btn-primary btn-block" type="button" (click)="deleteUser()">Delete</button>
+    </div>
+    <div *ngIf="result != null" class="modal-footer">
+        <h5 style="text-align: center; width: 100%;">{{result}}</h5>
+    </div>
+</ng-template>
+
+<ng-template #edit let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Edit Post</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="dismiss()"></button>
+    </div>
+    <div class="modal-body">
+        <form class="form-signin">
+            <label for="inputTitle" class="sr-only">Title</label>
+            <input type="text" id="inputTitle" class="form-control" placeholder="Title" required autofocus name="title" [(ngModel)]="title">
+            <label for="inputScore" class="sr-only">Score</label>
+            <input type="number" min="0" max="10" id="inputScore" class="form-control" placeholder="Score" required autofocus name="score" [(ngModel)]="score">
+            <label for="inputDescription" class="sr-only">Description</label>
+            <textarea type="text" id="inputDescription" class="form-control" placeholder="Description" required autofocus name="description" [(ngModel)]="description"></textarea>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" (click)="update()">Update</button>
+        </form>
+    </div>
+    <div *ngIf="result != null" class="modal-footer">
+        <h5 style="text-align: center; width: 100%;">{{result}}</h5>
+    </div>
+</ng-template>
+
+<ng-template #deletePst let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Delete Post?</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="dismiss()"></button>
+    </div>
+    <div class="modal-body">
+        <button class="btn btn-lg btn-primary btn-block" type="button" (click)="deletePost()">Delete</button>
+    </div>
+    <div *ngIf="result != null" class="modal-footer">
+        <h5 style="text-align: center; width: 100%;">{{result}}</h5>
+    </div>
+</ng-template>

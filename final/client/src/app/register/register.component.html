@@ -1,0 +1,15 @@
+<form class="form-signin">
+    <h1>Welcome to Cinemy</h1>
+    <h1 class="h3 mb-3 font-weight-normal">Register your account below</h1>
+    <label for="inputFirstname" class="sr-only">First Name</label>
+    <input type="text" id="inputFirstname" class="form-control" placeholder="First Name" required autofocus name="firstname" [(ngModel)]="firstname">
+    <label for="inputLastname" class="sr-only">Last Name</label>
+    <input type="text" id="inputLastname" class="form-control" placeholder="Last Name" required autofocus name="lastname" [(ngModel)]="lastname">
+    <label for="inputUsername" class="sr-only">Username</label>
+    <input type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus name="username" [(ngModel)]="username">
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" id="inputPassword" class="form-control" placeholder="Password" required name="password" [(ngModel)]="password">
+    <label for="inputConfirmPassword" class="sr-only">Confirm Password</label>
+    <input type="password" id="pswd" class="form-control" placeholder="Confirm Password" required name="confirmpassword" [(ngModel)]="confirmedPassword">
+    <button class="btn btn-lg btn-primary btn-block" type="submit" (click)="register()">Register</button>
+</form>

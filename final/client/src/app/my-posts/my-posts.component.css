@@ -1,0 +1,25 @@
+#posts-container{
+    padding: 15px 100px 25px 100px;
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+    border-radius: 0.125rem;
+}
+
+#post-header{
+    padding-bottom: 20px;
+}
+
+.modify:hover{
+    background-color: lightgreen;
+}
+
+.delete:hover{
+    background-color: red;
+}
+
+input{
+    margin: 5px 0px 5px 0px;
+}
+
+textarea{
+    margin: 5px 0px 5px 0px;
+}
