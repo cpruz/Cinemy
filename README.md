@@ -1,5 +1,9 @@
 # Cinemy
 Cinemy allows users to share their opinion on hundreds of thousands of movies and view other users' thoughts as well.
+## Home Page
+![alt cinemy home page](https://github.com/cpruz/Cinemy/blob/main/Homepage.png)
+## Admin Page
+![alt cinemy admin page](https://github.com/cpruz/Cinemy/blob/main/Adminpage.png)
 <ul>
   <li>Hosted Project</li>
   <ul>
